@@ -1,0 +1,259 @@
+/*
+package main
+
+import (
+    "context"
+	"log"
+	"fmt"
+	"time"
+
+	"github.com/JustinHaTran/ImageRepo/ent"
+	"github.com/JustinHaTran/ImageRepo/ent/user"
+	"github.com/JustinHaTran/ImageRepo/ent/image"
+	"github.com/JustinHaTran/ImageRepo/ent/imagerepo"
+
+	_ "github.com/go-sql-driver/mysql"
+)
+
+func main() {
+    client, err := ent.Open("mysql", "root:022816@tcp(127.0.0.1)/ImageRepoDB")
+    if err != nil {
+        log.Fatalf("failed opening connection to sqlite: %v", err)
+    }
+    defer client.Close()
+    // Run the auto migration tool.
+    if err := client.Schema.Create(context.Background()); err != nil {
+        log.Fatalf("failed creating schema resources: %v", err)
+	}
+
+	ctx := context.Background()
+	//CreateUser(ctx, client)
+	CreateImages(ctx, client)
+	user, err := QueryUser(ctx, client)
+	if err != nil {
+        log.Fatalf("failed query: %v", err)
+	}
+	QueryImages(ctx, user)
+	QueryImageUsers(ctx, user)
+	CreateGraph(ctx, client)
+	QueryGithub(ctx, client)
+	QueryArielImages(ctx, client)
+	QueryImageRepoWithImages(ctx, client)
+}
+
+func CreateUser(ctx context.Context, client *ent.Client) (*ent.User, error) {
+    u, err := client.User.
+        Create().
+        SetAge(30).
+        SetName("a8m").
+        Save(ctx)
+    if err != nil {
+        return nil, fmt.Errorf("failed creating user: %v", err)
+    }
+    log.Println("user was created: ", u)
+    return u, nil
+}
+
+func QueryUser(ctx context.Context, client *ent.Client) (*ent.User, error) {
+    u, err := client.User.
+        Query().
+        Where(user.NameEQ("a8m")).
+        // `Only` fails if no user found,
+        // or more than 1 user returned.
+        Only(ctx)
+    if err != nil {
+        return nil, fmt.Errorf("failed querying user: %v", err)
+    }
+    log.Println("user returned: ", u)
+    return u, nil
+}
+
+func CreateImages(ctx context.Context, client *ent.Client) (*ent.User, error) {
+    // Create a new car with model "Tesla".
+    tesla, err := client.Image.
+        Create().
+        SetModel("Tesla").
+        SetRegisteredAt(time.Now()).
+        Save(ctx)
+    if err != nil {
+        return nil, fmt.Errorf("failed creating car: %v", err)
+    }
+
+    // Create a new car with model "Ford".
+    ford, err := client.Image.
+        Create().
+        SetModel("Ford").
+        SetRegisteredAt(time.Now()).
+        Save(ctx)
+    if err != nil {
+        return nil, fmt.Errorf("failed creating car: %v", err)
+    }
+    log.Println("car was created: ", ford)
+
+    // Create a new user, and add it the 2 cars.
+    a8m, err := client.User.
+        Create().
+        SetAge(30).
+        SetName("a8m").
+        AddImages(tesla, ford).
+        Save(ctx)
+    if err != nil {
+        return nil, fmt.Errorf("failed creating user: %v", err)
+    }
+    log.Println("user was created: ", a8m)
+    return a8m, nil
+}
+
+func QueryImages(ctx context.Context, a8m *ent.User) error {
+    images, err := a8m.QueryImages().All(ctx)
+    if err != nil {
+        return fmt.Errorf("failed querying user images: %v", err)
+    }
+    log.Println("returned images:", images)
+
+    // What about filtering specific cars.
+    ford, err := a8m.QueryImages().
+        Where(image.ModelEQ("Ford")).
+        Only(ctx)
+    if err != nil {
+        return fmt.Errorf("failed querying user images: %v", err)
+    }
+    log.Println(ford)
+    return nil
+}
+
+func QueryImageUsers(ctx context.Context, a8m *ent.User) error {
+    images, err := a8m.QueryImages().All(ctx)
+    if err != nil {
+        return fmt.Errorf("failed querying user images: %v", err)
+    }
+    // Query the inverse edge.
+    for _, ca := range images {
+        owner, err := ca.QueryOwner().Only(ctx)
+        if err != nil {
+            return fmt.Errorf("failed querying image %q owner: %v", ca.Model, err)
+        }
+        log.Printf("image %q owner: %q\n", ca.Model, owner.Name)
+    }
+    return nil
+}
+
+func CreateGraph(ctx context.Context, client *ent.Client) error {
+    // First, create the users.
+    a8m, err := client.User.
+        Create().
+        SetAge(30).
+        SetName("Ariel").
+        Save(ctx)
+    if err != nil {
+        return err
+    }
+    neta, err := client.User.
+        Create().
+        SetAge(28).
+        SetName("Neta").
+        Save(ctx)
+    if err != nil {
+        return err
+    }
+    // Then, create the cars, and attach them to the users in the creation.
+    tesla, err := client.Image.
+        Create().
+        SetModel("Tesla").
+        SetRegisteredAt(time.Now()). // ignore the time in the graph.
+        SetOwner(a8m).               // attach this graph to Ariel.
+        Save(ctx)
+    if err != nil {
+        return err
+    }
+    mazda, err := client.Image.
+        Create().
+        SetModel("Mazda").
+        SetRegisteredAt(time.Now()). // ignore the time in the graph.
+        SetOwner(a8m).               // attach this graph to Ariel.
+        Save(ctx)
+    if err != nil {
+        return err
+    }
+    ford, err := client.Image.
+        Create().
+        SetModel("Ford").
+        SetRegisteredAt(time.Now()). // ignore the time in the graph.
+        SetOwner(neta).              // attach this graph to Neta.
+        Save(ctx)
+    if err != nil {
+        return err
+    }
+    // Create the groups, and add their users in the creation.
+    _, err = client.ImageRepo.
+        Create().
+        SetName("GitLab").
+        AddImages(mazda, ford).
+        Save(ctx)
+    if err != nil {
+        return err
+    }
+    _, err = client.ImageRepo.
+        Create().
+        SetName("GitHub").
+        AddImages(tesla).
+        Save(ctx)
+    if err != nil {
+        return err
+    }
+    log.Println("The graph was created successfully")
+    return nil
+}
+
+func QueryGithub(ctx context.Context, client *ent.Client) error {
+    images, err := client.ImageRepo.
+        Query().
+        Where(imagerepo.Name("GitHub")). // (Group(Name=GitHub),)
+		QueryImages().                 // (Car(Model=Tesla, RegisteredAt=<Time>), Car(Model=Mazda, RegisteredAt=<Time>),)
+		All(ctx)
+    if err != nil {
+        return fmt.Errorf("failed getting images: %v", err)
+    }
+    log.Println("images returned:", images)
+    // Output: (Car(Model=Tesla, RegisteredAt=<Time>), Car(Model=Mazda, RegisteredAt=<Time>),)
+    return nil
+}
+
+func QueryArielImages(ctx context.Context, client *ent.Client) error {
+    // Get "Ariel" from previous steps.
+    a8m := client.User.
+        Query().
+        Where(
+            user.HasImages(),
+            user.Name("Ariel"),
+        ).
+        OnlyX(ctx)
+    images, err := a8m.                       // Get the groups, that a8m is connected to:
+            QueryImages().                  // (Group(Name=GitHub), Group(Name=GitLab),)                   //
+            Where(                          //
+                image.Not(                    //  Get Neta and Ariel cars, but filter out
+                    image.ModelEQ("Mazda"),   //  those who named "Mazda"
+                ),                          //
+            ).                              //
+            All(ctx)
+    if err != nil {
+        return fmt.Errorf("failed getting images: %v", err)
+    }
+    log.Println("images returned:", images)
+    // Output: (Car(Model=Tesla, RegisteredAt=<Time>), Car(Model=Ford, RegisteredAt=<Time>),)
+    return nil
+}
+
+func QueryImageRepoWithImages(ctx context.Context, client *ent.Client) error {
+    imageRepos, err := client.ImageRepo.
+        Query().
+        Where(imagerepo.HasImages()).
+        All(ctx)
+    if err != nil {
+        return fmt.Errorf("failed getting imagerepos: %v", err)
+    }
+    log.Println("imagerepos returned:", imageRepos)
+    // Output: (Group(Name=GitHub), Group(Name=GitLab),)
+    return nil
+}
+*/
