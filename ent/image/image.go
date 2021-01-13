@@ -7,10 +7,16 @@ const (
 	Label = "image"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldModel holds the string denoting the model field in the database.
-	FieldModel = "model"
-	// FieldRegisteredAt holds the string denoting the registered_at field in the database.
-	FieldRegisteredAt = "registered_at"
+	// FieldTitle holds the string denoting the title field in the database.
+	FieldTitle = "title"
+	// FieldFileLocation holds the string denoting the filelocation field in the database.
+	FieldFileLocation = "file_location"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
+	// FieldPrice holds the string denoting the price field in the database.
+	FieldPrice = "price"
+	// FieldPublic holds the string denoting the public field in the database.
+	FieldPublic = "public"
 
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
@@ -36,8 +42,11 @@ const (
 // Columns holds all SQL columns for image fields.
 var Columns = []string{
 	FieldID,
-	FieldModel,
-	FieldRegisteredAt,
+	FieldTitle,
+	FieldFileLocation,
+	FieldDescription,
+	FieldPrice,
+	FieldPublic,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the Image type.

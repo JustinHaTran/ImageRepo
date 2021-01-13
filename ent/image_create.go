@@ -6,7 +6,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/JustinHaTran/ImageRepo/ent/image"
 	"github.com/JustinHaTran/ImageRepo/ent/imagerepo"
@@ -22,15 +21,33 @@ type ImageCreate struct {
 	hooks    []Hook
 }
 
-// SetModel sets the model field.
-func (ic *ImageCreate) SetModel(s string) *ImageCreate {
-	ic.mutation.SetModel(s)
+// SetTitle sets the title field.
+func (ic *ImageCreate) SetTitle(s string) *ImageCreate {
+	ic.mutation.SetTitle(s)
 	return ic
 }
 
-// SetRegisteredAt sets the registered_at field.
-func (ic *ImageCreate) SetRegisteredAt(t time.Time) *ImageCreate {
-	ic.mutation.SetRegisteredAt(t)
+// SetFileLocation sets the fileLocation field.
+func (ic *ImageCreate) SetFileLocation(s string) *ImageCreate {
+	ic.mutation.SetFileLocation(s)
+	return ic
+}
+
+// SetDescription sets the description field.
+func (ic *ImageCreate) SetDescription(s string) *ImageCreate {
+	ic.mutation.SetDescription(s)
+	return ic
+}
+
+// SetPrice sets the price field.
+func (ic *ImageCreate) SetPrice(f float64) *ImageCreate {
+	ic.mutation.SetPrice(f)
+	return ic
+}
+
+// SetPublic sets the public field.
+func (ic *ImageCreate) SetPublic(b bool) *ImageCreate {
+	ic.mutation.SetPublic(b)
 	return ic
 }
 
@@ -119,11 +136,20 @@ func (ic *ImageCreate) SaveX(ctx context.Context) *Image {
 
 // check runs all checks and user-defined validators on the builder.
 func (ic *ImageCreate) check() error {
-	if _, ok := ic.mutation.Model(); !ok {
-		return &ValidationError{Name: "model", err: errors.New("ent: missing required field \"model\"")}
+	if _, ok := ic.mutation.Title(); !ok {
+		return &ValidationError{Name: "title", err: errors.New("ent: missing required field \"title\"")}
 	}
-	if _, ok := ic.mutation.RegisteredAt(); !ok {
-		return &ValidationError{Name: "registered_at", err: errors.New("ent: missing required field \"registered_at\"")}
+	if _, ok := ic.mutation.FileLocation(); !ok {
+		return &ValidationError{Name: "fileLocation", err: errors.New("ent: missing required field \"fileLocation\"")}
+	}
+	if _, ok := ic.mutation.Description(); !ok {
+		return &ValidationError{Name: "description", err: errors.New("ent: missing required field \"description\"")}
+	}
+	if _, ok := ic.mutation.Price(); !ok {
+		return &ValidationError{Name: "price", err: errors.New("ent: missing required field \"price\"")}
+	}
+	if _, ok := ic.mutation.Public(); !ok {
+		return &ValidationError{Name: "public", err: errors.New("ent: missing required field \"public\"")}
 	}
 	return nil
 }
@@ -152,21 +178,45 @@ func (ic *ImageCreate) createSpec() (*Image, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := ic.mutation.Model(); ok {
+	if value, ok := ic.mutation.Title(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: image.FieldModel,
+			Column: image.FieldTitle,
 		})
-		_node.Model = value
+		_node.Title = value
 	}
-	if value, ok := ic.mutation.RegisteredAt(); ok {
+	if value, ok := ic.mutation.FileLocation(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
+			Type:   field.TypeString,
 			Value:  value,
-			Column: image.FieldRegisteredAt,
+			Column: image.FieldFileLocation,
 		})
-		_node.RegisteredAt = value
+		_node.FileLocation = value
+	}
+	if value, ok := ic.mutation.Description(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: image.FieldDescription,
+		})
+		_node.Description = value
+	}
+	if value, ok := ic.mutation.Price(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: image.FieldPrice,
+		})
+		_node.Price = value
+	}
+	if value, ok := ic.mutation.Public(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: image.FieldPublic,
+		})
+		_node.Public = value
 	}
 	if nodes := ic.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -313,12 +313,12 @@ func (iq *ImageQuery) WithImagerepos(opts ...func(*ImageRepoQuery)) *ImageQuery 
 // Example:
 //
 //	var v []struct {
-//		Model string `json:"model,omitempty"`
+//		Title string `json:"title,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Image.Query().
-//		GroupBy(image.FieldModel).
+//		GroupBy(image.FieldTitle).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 //
@@ -339,11 +339,11 @@ func (iq *ImageQuery) GroupBy(field string, fields ...string) *ImageGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Model string `json:"model,omitempty"`
+//		Title string `json:"title,omitempty"`
 //	}
 //
 //	client.Image.Query().
-//		Select(image.FieldModel).
+//		Select(image.FieldTitle).
 //		Scan(ctx, &v)
 //
 func (iq *ImageQuery) Select(field string, fields ...string) *ImageSelect {

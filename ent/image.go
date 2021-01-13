@@ -5,7 +5,6 @@ package ent
 import (
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/JustinHaTran/ImageRepo/ent/image"
 	"github.com/JustinHaTran/ImageRepo/ent/user"
@@ -17,10 +16,16 @@ type Image struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// Model holds the value of the "model" field.
-	Model string `json:"model,omitempty"`
-	// RegisteredAt holds the value of the "registered_at" field.
-	RegisteredAt time.Time `json:"registered_at,omitempty"`
+	// Title holds the value of the "title" field.
+	Title string `json:"title,omitempty"`
+	// FileLocation holds the value of the "fileLocation" field.
+	FileLocation string `json:"fileLocation,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// Price holds the value of the "price" field.
+	Price float64 `json:"price,omitempty"`
+	// Public holds the value of the "public" field.
+	Public bool `json:"public,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ImageQuery when eager-loading is set.
 	Edges       ImageEdges `json:"edges"`
@@ -64,9 +69,12 @@ func (e ImageEdges) ImagereposOrErr() ([]*ImageRepo, error) {
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Image) scanValues() []interface{} {
 	return []interface{}{
-		&sql.NullInt64{},  // id
-		&sql.NullString{}, // model
-		&sql.NullTime{},   // registered_at
+		&sql.NullInt64{},   // id
+		&sql.NullString{},  // title
+		&sql.NullString{},  // fileLocation
+		&sql.NullString{},  // description
+		&sql.NullFloat64{}, // price
+		&sql.NullBool{},    // public
 	}
 }
 
@@ -90,16 +98,31 @@ func (i *Image) assignValues(values ...interface{}) error {
 	i.ID = int(value.Int64)
 	values = values[1:]
 	if value, ok := values[0].(*sql.NullString); !ok {
-		return fmt.Errorf("unexpected type %T for field model", values[0])
+		return fmt.Errorf("unexpected type %T for field title", values[0])
 	} else if value.Valid {
-		i.Model = value.String
+		i.Title = value.String
 	}
-	if value, ok := values[1].(*sql.NullTime); !ok {
-		return fmt.Errorf("unexpected type %T for field registered_at", values[1])
+	if value, ok := values[1].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field fileLocation", values[1])
 	} else if value.Valid {
-		i.RegisteredAt = value.Time
+		i.FileLocation = value.String
 	}
-	values = values[2:]
+	if value, ok := values[2].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field description", values[2])
+	} else if value.Valid {
+		i.Description = value.String
+	}
+	if value, ok := values[3].(*sql.NullFloat64); !ok {
+		return fmt.Errorf("unexpected type %T for field price", values[3])
+	} else if value.Valid {
+		i.Price = value.Float64
+	}
+	if value, ok := values[4].(*sql.NullBool); !ok {
+		return fmt.Errorf("unexpected type %T for field public", values[4])
+	} else if value.Valid {
+		i.Public = value.Bool
+	}
+	values = values[5:]
 	if len(values) == len(image.ForeignKeys) {
 		if value, ok := values[0].(*sql.NullInt64); !ok {
 			return fmt.Errorf("unexpected type %T for edge-field user_images", value)
@@ -144,10 +167,16 @@ func (i *Image) String() string {
 	var builder strings.Builder
 	builder.WriteString("Image(")
 	builder.WriteString(fmt.Sprintf("id=%v", i.ID))
-	builder.WriteString(", model=")
-	builder.WriteString(i.Model)
-	builder.WriteString(", registered_at=")
-	builder.WriteString(i.RegisteredAt.Format(time.ANSIC))
+	builder.WriteString(", title=")
+	builder.WriteString(i.Title)
+	builder.WriteString(", fileLocation=")
+	builder.WriteString(i.FileLocation)
+	builder.WriteString(", description=")
+	builder.WriteString(i.Description)
+	builder.WriteString(", price=")
+	builder.WriteString(fmt.Sprintf("%v", i.Price))
+	builder.WriteString(", public=")
+	builder.WriteString(fmt.Sprintf("%v", i.Public))
 	builder.WriteByte(')')
 	return builder.String()
 }

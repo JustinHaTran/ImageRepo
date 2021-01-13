@@ -3,8 +3,6 @@
 package image
 
 import (
-	"time"
-
 	"github.com/JustinHaTran/ImageRepo/ent/predicate"
 	"github.com/facebook/ent/dialect/sql"
 	"github.com/facebook/ent/dialect/sql/sqlgraph"
@@ -93,36 +91,57 @@ func IDLTE(id int) predicate.Image {
 	})
 }
 
-// Model applies equality check predicate on the "model" field. It's identical to ModelEQ.
-func Model(v string) predicate.Image {
+// Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
+func Title(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldModel), v))
+		s.Where(sql.EQ(s.C(FieldTitle), v))
 	})
 }
 
-// RegisteredAt applies equality check predicate on the "registered_at" field. It's identical to RegisteredAtEQ.
-func RegisteredAt(v time.Time) predicate.Image {
+// FileLocation applies equality check predicate on the "fileLocation" field. It's identical to FileLocationEQ.
+func FileLocation(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldRegisteredAt), v))
+		s.Where(sql.EQ(s.C(FieldFileLocation), v))
 	})
 }
 
-// ModelEQ applies the EQ predicate on the "model" field.
-func ModelEQ(v string) predicate.Image {
+// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
+func Description(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldModel), v))
+		s.Where(sql.EQ(s.C(FieldDescription), v))
 	})
 }
 
-// ModelNEQ applies the NEQ predicate on the "model" field.
-func ModelNEQ(v string) predicate.Image {
+// Price applies equality check predicate on the "price" field. It's identical to PriceEQ.
+func Price(v float64) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldModel), v))
+		s.Where(sql.EQ(s.C(FieldPrice), v))
 	})
 }
 
-// ModelIn applies the In predicate on the "model" field.
-func ModelIn(vs ...string) predicate.Image {
+// Public applies equality check predicate on the "public" field. It's identical to PublicEQ.
+func Public(v bool) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPublic), v))
+	})
+}
+
+// TitleEQ applies the EQ predicate on the "title" field.
+func TitleEQ(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldTitle), v))
+	})
+}
+
+// TitleNEQ applies the NEQ predicate on the "title" field.
+func TitleNEQ(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldTitle), v))
+	})
+}
+
+// TitleIn applies the In predicate on the "title" field.
+func TitleIn(vs ...string) predicate.Image {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -134,12 +153,12 @@ func ModelIn(vs ...string) predicate.Image {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldModel), v...))
+		s.Where(sql.In(s.C(FieldTitle), v...))
 	})
 }
 
-// ModelNotIn applies the NotIn predicate on the "model" field.
-func ModelNotIn(vs ...string) predicate.Image {
+// TitleNotIn applies the NotIn predicate on the "title" field.
+func TitleNotIn(vs ...string) predicate.Image {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -151,89 +170,89 @@ func ModelNotIn(vs ...string) predicate.Image {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldModel), v...))
+		s.Where(sql.NotIn(s.C(FieldTitle), v...))
 	})
 }
 
-// ModelGT applies the GT predicate on the "model" field.
-func ModelGT(v string) predicate.Image {
+// TitleGT applies the GT predicate on the "title" field.
+func TitleGT(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldModel), v))
+		s.Where(sql.GT(s.C(FieldTitle), v))
 	})
 }
 
-// ModelGTE applies the GTE predicate on the "model" field.
-func ModelGTE(v string) predicate.Image {
+// TitleGTE applies the GTE predicate on the "title" field.
+func TitleGTE(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldModel), v))
+		s.Where(sql.GTE(s.C(FieldTitle), v))
 	})
 }
 
-// ModelLT applies the LT predicate on the "model" field.
-func ModelLT(v string) predicate.Image {
+// TitleLT applies the LT predicate on the "title" field.
+func TitleLT(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldModel), v))
+		s.Where(sql.LT(s.C(FieldTitle), v))
 	})
 }
 
-// ModelLTE applies the LTE predicate on the "model" field.
-func ModelLTE(v string) predicate.Image {
+// TitleLTE applies the LTE predicate on the "title" field.
+func TitleLTE(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldModel), v))
+		s.Where(sql.LTE(s.C(FieldTitle), v))
 	})
 }
 
-// ModelContains applies the Contains predicate on the "model" field.
-func ModelContains(v string) predicate.Image {
+// TitleContains applies the Contains predicate on the "title" field.
+func TitleContains(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldModel), v))
+		s.Where(sql.Contains(s.C(FieldTitle), v))
 	})
 }
 
-// ModelHasPrefix applies the HasPrefix predicate on the "model" field.
-func ModelHasPrefix(v string) predicate.Image {
+// TitleHasPrefix applies the HasPrefix predicate on the "title" field.
+func TitleHasPrefix(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldModel), v))
+		s.Where(sql.HasPrefix(s.C(FieldTitle), v))
 	})
 }
 
-// ModelHasSuffix applies the HasSuffix predicate on the "model" field.
-func ModelHasSuffix(v string) predicate.Image {
+// TitleHasSuffix applies the HasSuffix predicate on the "title" field.
+func TitleHasSuffix(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldModel), v))
+		s.Where(sql.HasSuffix(s.C(FieldTitle), v))
 	})
 }
 
-// ModelEqualFold applies the EqualFold predicate on the "model" field.
-func ModelEqualFold(v string) predicate.Image {
+// TitleEqualFold applies the EqualFold predicate on the "title" field.
+func TitleEqualFold(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldModel), v))
+		s.Where(sql.EqualFold(s.C(FieldTitle), v))
 	})
 }
 
-// ModelContainsFold applies the ContainsFold predicate on the "model" field.
-func ModelContainsFold(v string) predicate.Image {
+// TitleContainsFold applies the ContainsFold predicate on the "title" field.
+func TitleContainsFold(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldModel), v))
+		s.Where(sql.ContainsFold(s.C(FieldTitle), v))
 	})
 }
 
-// RegisteredAtEQ applies the EQ predicate on the "registered_at" field.
-func RegisteredAtEQ(v time.Time) predicate.Image {
+// FileLocationEQ applies the EQ predicate on the "fileLocation" field.
+func FileLocationEQ(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldRegisteredAt), v))
+		s.Where(sql.EQ(s.C(FieldFileLocation), v))
 	})
 }
 
-// RegisteredAtNEQ applies the NEQ predicate on the "registered_at" field.
-func RegisteredAtNEQ(v time.Time) predicate.Image {
+// FileLocationNEQ applies the NEQ predicate on the "fileLocation" field.
+func FileLocationNEQ(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldRegisteredAt), v))
+		s.Where(sql.NEQ(s.C(FieldFileLocation), v))
 	})
 }
 
-// RegisteredAtIn applies the In predicate on the "registered_at" field.
-func RegisteredAtIn(vs ...time.Time) predicate.Image {
+// FileLocationIn applies the In predicate on the "fileLocation" field.
+func FileLocationIn(vs ...string) predicate.Image {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -245,12 +264,12 @@ func RegisteredAtIn(vs ...time.Time) predicate.Image {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldRegisteredAt), v...))
+		s.Where(sql.In(s.C(FieldFileLocation), v...))
 	})
 }
 
-// RegisteredAtNotIn applies the NotIn predicate on the "registered_at" field.
-func RegisteredAtNotIn(vs ...time.Time) predicate.Image {
+// FileLocationNotIn applies the NotIn predicate on the "fileLocation" field.
+func FileLocationNotIn(vs ...string) predicate.Image {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -262,35 +281,271 @@ func RegisteredAtNotIn(vs ...time.Time) predicate.Image {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldRegisteredAt), v...))
+		s.Where(sql.NotIn(s.C(FieldFileLocation), v...))
 	})
 }
 
-// RegisteredAtGT applies the GT predicate on the "registered_at" field.
-func RegisteredAtGT(v time.Time) predicate.Image {
+// FileLocationGT applies the GT predicate on the "fileLocation" field.
+func FileLocationGT(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldRegisteredAt), v))
+		s.Where(sql.GT(s.C(FieldFileLocation), v))
 	})
 }
 
-// RegisteredAtGTE applies the GTE predicate on the "registered_at" field.
-func RegisteredAtGTE(v time.Time) predicate.Image {
+// FileLocationGTE applies the GTE predicate on the "fileLocation" field.
+func FileLocationGTE(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldRegisteredAt), v))
+		s.Where(sql.GTE(s.C(FieldFileLocation), v))
 	})
 }
 
-// RegisteredAtLT applies the LT predicate on the "registered_at" field.
-func RegisteredAtLT(v time.Time) predicate.Image {
+// FileLocationLT applies the LT predicate on the "fileLocation" field.
+func FileLocationLT(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldRegisteredAt), v))
+		s.Where(sql.LT(s.C(FieldFileLocation), v))
 	})
 }
 
-// RegisteredAtLTE applies the LTE predicate on the "registered_at" field.
-func RegisteredAtLTE(v time.Time) predicate.Image {
+// FileLocationLTE applies the LTE predicate on the "fileLocation" field.
+func FileLocationLTE(v string) predicate.Image {
 	return predicate.Image(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldRegisteredAt), v))
+		s.Where(sql.LTE(s.C(FieldFileLocation), v))
+	})
+}
+
+// FileLocationContains applies the Contains predicate on the "fileLocation" field.
+func FileLocationContains(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldFileLocation), v))
+	})
+}
+
+// FileLocationHasPrefix applies the HasPrefix predicate on the "fileLocation" field.
+func FileLocationHasPrefix(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldFileLocation), v))
+	})
+}
+
+// FileLocationHasSuffix applies the HasSuffix predicate on the "fileLocation" field.
+func FileLocationHasSuffix(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldFileLocation), v))
+	})
+}
+
+// FileLocationEqualFold applies the EqualFold predicate on the "fileLocation" field.
+func FileLocationEqualFold(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldFileLocation), v))
+	})
+}
+
+// FileLocationContainsFold applies the ContainsFold predicate on the "fileLocation" field.
+func FileLocationContainsFold(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldFileLocation), v))
+	})
+}
+
+// DescriptionEQ applies the EQ predicate on the "description" field.
+func DescriptionEQ(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionNEQ applies the NEQ predicate on the "description" field.
+func DescriptionNEQ(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionIn applies the In predicate on the "description" field.
+func DescriptionIn(vs ...string) predicate.Image {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Image(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldDescription), v...))
+	})
+}
+
+// DescriptionNotIn applies the NotIn predicate on the "description" field.
+func DescriptionNotIn(vs ...string) predicate.Image {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Image(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldDescription), v...))
+	})
+}
+
+// DescriptionGT applies the GT predicate on the "description" field.
+func DescriptionGT(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionGTE applies the GTE predicate on the "description" field.
+func DescriptionGTE(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionLT applies the LT predicate on the "description" field.
+func DescriptionLT(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionLTE applies the LTE predicate on the "description" field.
+func DescriptionLTE(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionContains applies the Contains predicate on the "description" field.
+func DescriptionContains(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
+func DescriptionHasPrefix(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
+func DescriptionHasSuffix(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
+func DescriptionEqualFold(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
+func DescriptionContainsFold(v string) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldDescription), v))
+	})
+}
+
+// PriceEQ applies the EQ predicate on the "price" field.
+func PriceEQ(v float64) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPrice), v))
+	})
+}
+
+// PriceNEQ applies the NEQ predicate on the "price" field.
+func PriceNEQ(v float64) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldPrice), v))
+	})
+}
+
+// PriceIn applies the In predicate on the "price" field.
+func PriceIn(vs ...float64) predicate.Image {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Image(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldPrice), v...))
+	})
+}
+
+// PriceNotIn applies the NotIn predicate on the "price" field.
+func PriceNotIn(vs ...float64) predicate.Image {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Image(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldPrice), v...))
+	})
+}
+
+// PriceGT applies the GT predicate on the "price" field.
+func PriceGT(v float64) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldPrice), v))
+	})
+}
+
+// PriceGTE applies the GTE predicate on the "price" field.
+func PriceGTE(v float64) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldPrice), v))
+	})
+}
+
+// PriceLT applies the LT predicate on the "price" field.
+func PriceLT(v float64) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldPrice), v))
+	})
+}
+
+// PriceLTE applies the LTE predicate on the "price" field.
+func PriceLTE(v float64) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldPrice), v))
+	})
+}
+
+// PublicEQ applies the EQ predicate on the "public" field.
+func PublicEQ(v bool) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPublic), v))
+	})
+}
+
+// PublicNEQ applies the NEQ predicate on the "public" field.
+func PublicNEQ(v bool) predicate.Image {
+	return predicate.Image(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldPublic), v))
 	})
 }
 

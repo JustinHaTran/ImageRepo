@@ -11,8 +11,11 @@ var (
 	// ImagesColumns holds the columns for the "images" table.
 	ImagesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "model", Type: field.TypeString},
-		{Name: "registered_at", Type: field.TypeTime},
+		{Name: "title", Type: field.TypeString},
+		{Name: "file_location", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString},
+		{Name: "price", Type: field.TypeFloat64},
+		{Name: "public", Type: field.TypeBool},
 		{Name: "user_images", Type: field.TypeInt, Nullable: true},
 	}
 	// ImagesTable holds the schema information for the "images" table.
@@ -23,7 +26,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "images_users_images",
-				Columns: []*schema.Column{ImagesColumns[3]},
+				Columns: []*schema.Column{ImagesColumns[6]},
 
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,

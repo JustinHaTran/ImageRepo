@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"sync"
-	"time"
 
 	"github.com/JustinHaTran/ImageRepo/ent/image"
 	"github.com/JustinHaTran/ImageRepo/ent/imagerepo"
@@ -37,8 +36,12 @@ type ImageMutation struct {
 	op                Op
 	typ               string
 	id                *int
-	model             *string
-	registered_at     *time.Time
+	title             *string
+	fileLocation      *string
+	description       *string
+	price             *float64
+	addprice          *float64
+	public            *bool
 	clearedFields     map[string]struct{}
 	owner             *int
 	clearedowner      bool
@@ -129,78 +132,209 @@ func (m *ImageMutation) ID() (id int, exists bool) {
 	return *m.id, true
 }
 
-// SetModel sets the model field.
-func (m *ImageMutation) SetModel(s string) {
-	m.model = &s
+// SetTitle sets the title field.
+func (m *ImageMutation) SetTitle(s string) {
+	m.title = &s
 }
 
-// Model returns the model value in the mutation.
-func (m *ImageMutation) Model() (r string, exists bool) {
-	v := m.model
+// Title returns the title value in the mutation.
+func (m *ImageMutation) Title() (r string, exists bool) {
+	v := m.title
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldModel returns the old model value of the Image.
+// OldTitle returns the old title value of the Image.
 // If the Image object wasn't provided to the builder, the object is fetched
 // from the database.
 // An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *ImageMutation) OldModel(ctx context.Context) (v string, err error) {
+func (m *ImageMutation) OldTitle(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldModel is allowed only on UpdateOne operations")
+		return v, fmt.Errorf("OldTitle is allowed only on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldModel requires an ID field in the mutation")
+		return v, fmt.Errorf("OldTitle requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldModel: %w", err)
+		return v, fmt.Errorf("querying old value for OldTitle: %w", err)
 	}
-	return oldValue.Model, nil
+	return oldValue.Title, nil
 }
 
-// ResetModel reset all changes of the "model" field.
-func (m *ImageMutation) ResetModel() {
-	m.model = nil
+// ResetTitle reset all changes of the "title" field.
+func (m *ImageMutation) ResetTitle() {
+	m.title = nil
 }
 
-// SetRegisteredAt sets the registered_at field.
-func (m *ImageMutation) SetRegisteredAt(t time.Time) {
-	m.registered_at = &t
+// SetFileLocation sets the fileLocation field.
+func (m *ImageMutation) SetFileLocation(s string) {
+	m.fileLocation = &s
 }
 
-// RegisteredAt returns the registered_at value in the mutation.
-func (m *ImageMutation) RegisteredAt() (r time.Time, exists bool) {
-	v := m.registered_at
+// FileLocation returns the fileLocation value in the mutation.
+func (m *ImageMutation) FileLocation() (r string, exists bool) {
+	v := m.fileLocation
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldRegisteredAt returns the old registered_at value of the Image.
+// OldFileLocation returns the old fileLocation value of the Image.
 // If the Image object wasn't provided to the builder, the object is fetched
 // from the database.
 // An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *ImageMutation) OldRegisteredAt(ctx context.Context) (v time.Time, err error) {
+func (m *ImageMutation) OldFileLocation(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldRegisteredAt is allowed only on UpdateOne operations")
+		return v, fmt.Errorf("OldFileLocation is allowed only on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldRegisteredAt requires an ID field in the mutation")
+		return v, fmt.Errorf("OldFileLocation requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRegisteredAt: %w", err)
+		return v, fmt.Errorf("querying old value for OldFileLocation: %w", err)
 	}
-	return oldValue.RegisteredAt, nil
+	return oldValue.FileLocation, nil
 }
 
-// ResetRegisteredAt reset all changes of the "registered_at" field.
-func (m *ImageMutation) ResetRegisteredAt() {
-	m.registered_at = nil
+// ResetFileLocation reset all changes of the "fileLocation" field.
+func (m *ImageMutation) ResetFileLocation() {
+	m.fileLocation = nil
+}
+
+// SetDescription sets the description field.
+func (m *ImageMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the description value in the mutation.
+func (m *ImageMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old description value of the Image.
+// If the Image object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *ImageMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldDescription is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ResetDescription reset all changes of the "description" field.
+func (m *ImageMutation) ResetDescription() {
+	m.description = nil
+}
+
+// SetPrice sets the price field.
+func (m *ImageMutation) SetPrice(f float64) {
+	m.price = &f
+	m.addprice = nil
+}
+
+// Price returns the price value in the mutation.
+func (m *ImageMutation) Price() (r float64, exists bool) {
+	v := m.price
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrice returns the old price value of the Image.
+// If the Image object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *ImageMutation) OldPrice(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldPrice is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldPrice requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrice: %w", err)
+	}
+	return oldValue.Price, nil
+}
+
+// AddPrice adds f to price.
+func (m *ImageMutation) AddPrice(f float64) {
+	if m.addprice != nil {
+		*m.addprice += f
+	} else {
+		m.addprice = &f
+	}
+}
+
+// AddedPrice returns the value that was added to the price field in this mutation.
+func (m *ImageMutation) AddedPrice() (r float64, exists bool) {
+	v := m.addprice
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPrice reset all changes of the "price" field.
+func (m *ImageMutation) ResetPrice() {
+	m.price = nil
+	m.addprice = nil
+}
+
+// SetPublic sets the public field.
+func (m *ImageMutation) SetPublic(b bool) {
+	m.public = &b
+}
+
+// Public returns the public value in the mutation.
+func (m *ImageMutation) Public() (r bool, exists bool) {
+	v := m.public
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPublic returns the old public value of the Image.
+// If the Image object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *ImageMutation) OldPublic(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldPublic is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldPublic requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPublic: %w", err)
+	}
+	return oldValue.Public, nil
+}
+
+// ResetPublic reset all changes of the "public" field.
+func (m *ImageMutation) ResetPublic() {
+	m.public = nil
 }
 
 // SetOwnerID sets the owner edge to User by id.
@@ -309,12 +443,21 @@ func (m *ImageMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *ImageMutation) Fields() []string {
-	fields := make([]string, 0, 2)
-	if m.model != nil {
-		fields = append(fields, image.FieldModel)
+	fields := make([]string, 0, 5)
+	if m.title != nil {
+		fields = append(fields, image.FieldTitle)
 	}
-	if m.registered_at != nil {
-		fields = append(fields, image.FieldRegisteredAt)
+	if m.fileLocation != nil {
+		fields = append(fields, image.FieldFileLocation)
+	}
+	if m.description != nil {
+		fields = append(fields, image.FieldDescription)
+	}
+	if m.price != nil {
+		fields = append(fields, image.FieldPrice)
+	}
+	if m.public != nil {
+		fields = append(fields, image.FieldPublic)
 	}
 	return fields
 }
@@ -324,10 +467,16 @@ func (m *ImageMutation) Fields() []string {
 // not set, or was not define in the schema.
 func (m *ImageMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case image.FieldModel:
-		return m.Model()
-	case image.FieldRegisteredAt:
-		return m.RegisteredAt()
+	case image.FieldTitle:
+		return m.Title()
+	case image.FieldFileLocation:
+		return m.FileLocation()
+	case image.FieldDescription:
+		return m.Description()
+	case image.FieldPrice:
+		return m.Price()
+	case image.FieldPublic:
+		return m.Public()
 	}
 	return nil, false
 }
@@ -337,10 +486,16 @@ func (m *ImageMutation) Field(name string) (ent.Value, bool) {
 // or the query to the database was failed.
 func (m *ImageMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case image.FieldModel:
-		return m.OldModel(ctx)
-	case image.FieldRegisteredAt:
-		return m.OldRegisteredAt(ctx)
+	case image.FieldTitle:
+		return m.OldTitle(ctx)
+	case image.FieldFileLocation:
+		return m.OldFileLocation(ctx)
+	case image.FieldDescription:
+		return m.OldDescription(ctx)
+	case image.FieldPrice:
+		return m.OldPrice(ctx)
+	case image.FieldPublic:
+		return m.OldPublic(ctx)
 	}
 	return nil, fmt.Errorf("unknown Image field %s", name)
 }
@@ -350,19 +505,40 @@ func (m *ImageMutation) OldField(ctx context.Context, name string) (ent.Value, e
 // type mismatch the field type.
 func (m *ImageMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case image.FieldModel:
+	case image.FieldTitle:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetModel(v)
+		m.SetTitle(v)
 		return nil
-	case image.FieldRegisteredAt:
-		v, ok := value.(time.Time)
+	case image.FieldFileLocation:
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetRegisteredAt(v)
+		m.SetFileLocation(v)
+		return nil
+	case image.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case image.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrice(v)
+		return nil
+	case image.FieldPublic:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPublic(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Image field %s", name)
@@ -371,13 +547,21 @@ func (m *ImageMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented
 // or decremented during this mutation.
 func (m *ImageMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addprice != nil {
+		fields = append(fields, image.FieldPrice)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was in/decremented
 // from a field with the given name. The second value indicates
 // that this field was not set, or was not define in the schema.
 func (m *ImageMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case image.FieldPrice:
+		return m.AddedPrice()
+	}
 	return nil, false
 }
 
@@ -386,6 +570,13 @@ func (m *ImageMutation) AddedField(name string) (ent.Value, bool) {
 // type mismatch the field type.
 func (m *ImageMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case image.FieldPrice:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPrice(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Image numeric field %s", name)
 }
@@ -414,11 +605,20 @@ func (m *ImageMutation) ClearField(name string) error {
 // defined in the schema.
 func (m *ImageMutation) ResetField(name string) error {
 	switch name {
-	case image.FieldModel:
-		m.ResetModel()
+	case image.FieldTitle:
+		m.ResetTitle()
 		return nil
-	case image.FieldRegisteredAt:
-		m.ResetRegisteredAt()
+	case image.FieldFileLocation:
+		m.ResetFileLocation()
+		return nil
+	case image.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case image.FieldPrice:
+		m.ResetPrice()
+		return nil
+	case image.FieldPublic:
+		m.ResetPublic()
 		return nil
 	}
 	return fmt.Errorf("unknown Image field %s", name)

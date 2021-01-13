@@ -14,8 +14,11 @@ type Image struct {
 // Fields of the Image.
 func (Image) Fields() []ent.Field {
 	return []ent.Field{
-        field.String("model"),
-        field.Time("registered_at"),
+        field.String("title"),
+        field.String("fileLocation"),
+        field.String("description"),
+        field.Float("price"),
+        field.Bool("public"),
     }
 }
 

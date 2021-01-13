@@ -5,7 +5,6 @@ package ent
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/JustinHaTran/ImageRepo/ent/image"
 	"github.com/JustinHaTran/ImageRepo/ent/imagerepo"
@@ -29,15 +28,40 @@ func (iu *ImageUpdate) Where(ps ...predicate.Image) *ImageUpdate {
 	return iu
 }
 
-// SetModel sets the model field.
-func (iu *ImageUpdate) SetModel(s string) *ImageUpdate {
-	iu.mutation.SetModel(s)
+// SetTitle sets the title field.
+func (iu *ImageUpdate) SetTitle(s string) *ImageUpdate {
+	iu.mutation.SetTitle(s)
 	return iu
 }
 
-// SetRegisteredAt sets the registered_at field.
-func (iu *ImageUpdate) SetRegisteredAt(t time.Time) *ImageUpdate {
-	iu.mutation.SetRegisteredAt(t)
+// SetFileLocation sets the fileLocation field.
+func (iu *ImageUpdate) SetFileLocation(s string) *ImageUpdate {
+	iu.mutation.SetFileLocation(s)
+	return iu
+}
+
+// SetDescription sets the description field.
+func (iu *ImageUpdate) SetDescription(s string) *ImageUpdate {
+	iu.mutation.SetDescription(s)
+	return iu
+}
+
+// SetPrice sets the price field.
+func (iu *ImageUpdate) SetPrice(f float64) *ImageUpdate {
+	iu.mutation.ResetPrice()
+	iu.mutation.SetPrice(f)
+	return iu
+}
+
+// AddPrice adds f to price.
+func (iu *ImageUpdate) AddPrice(f float64) *ImageUpdate {
+	iu.mutation.AddPrice(f)
+	return iu
+}
+
+// SetPublic sets the public field.
+func (iu *ImageUpdate) SetPublic(b bool) *ImageUpdate {
+	iu.mutation.SetPublic(b)
 	return iu
 }
 
@@ -176,18 +200,46 @@ func (iu *ImageUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := iu.mutation.Model(); ok {
+	if value, ok := iu.mutation.Title(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: image.FieldModel,
+			Column: image.FieldTitle,
 		})
 	}
-	if value, ok := iu.mutation.RegisteredAt(); ok {
+	if value, ok := iu.mutation.FileLocation(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
+			Type:   field.TypeString,
 			Value:  value,
-			Column: image.FieldRegisteredAt,
+			Column: image.FieldFileLocation,
+		})
+	}
+	if value, ok := iu.mutation.Description(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: image.FieldDescription,
+		})
+	}
+	if value, ok := iu.mutation.Price(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: image.FieldPrice,
+		})
+	}
+	if value, ok := iu.mutation.AddedPrice(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: image.FieldPrice,
+		})
+	}
+	if value, ok := iu.mutation.Public(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: image.FieldPublic,
 		})
 	}
 	if iu.mutation.OwnerCleared() {
@@ -297,15 +349,40 @@ type ImageUpdateOne struct {
 	mutation *ImageMutation
 }
 
-// SetModel sets the model field.
-func (iuo *ImageUpdateOne) SetModel(s string) *ImageUpdateOne {
-	iuo.mutation.SetModel(s)
+// SetTitle sets the title field.
+func (iuo *ImageUpdateOne) SetTitle(s string) *ImageUpdateOne {
+	iuo.mutation.SetTitle(s)
 	return iuo
 }
 
-// SetRegisteredAt sets the registered_at field.
-func (iuo *ImageUpdateOne) SetRegisteredAt(t time.Time) *ImageUpdateOne {
-	iuo.mutation.SetRegisteredAt(t)
+// SetFileLocation sets the fileLocation field.
+func (iuo *ImageUpdateOne) SetFileLocation(s string) *ImageUpdateOne {
+	iuo.mutation.SetFileLocation(s)
+	return iuo
+}
+
+// SetDescription sets the description field.
+func (iuo *ImageUpdateOne) SetDescription(s string) *ImageUpdateOne {
+	iuo.mutation.SetDescription(s)
+	return iuo
+}
+
+// SetPrice sets the price field.
+func (iuo *ImageUpdateOne) SetPrice(f float64) *ImageUpdateOne {
+	iuo.mutation.ResetPrice()
+	iuo.mutation.SetPrice(f)
+	return iuo
+}
+
+// AddPrice adds f to price.
+func (iuo *ImageUpdateOne) AddPrice(f float64) *ImageUpdateOne {
+	iuo.mutation.AddPrice(f)
+	return iuo
+}
+
+// SetPublic sets the public field.
+func (iuo *ImageUpdateOne) SetPublic(b bool) *ImageUpdateOne {
+	iuo.mutation.SetPublic(b)
 	return iuo
 }
 
@@ -442,18 +519,46 @@ func (iuo *ImageUpdateOne) sqlSave(ctx context.Context) (_node *Image, err error
 		return nil, &ValidationError{Name: "ID", err: fmt.Errorf("missing Image.ID for update")}
 	}
 	_spec.Node.ID.Value = id
-	if value, ok := iuo.mutation.Model(); ok {
+	if value, ok := iuo.mutation.Title(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: image.FieldModel,
+			Column: image.FieldTitle,
 		})
 	}
-	if value, ok := iuo.mutation.RegisteredAt(); ok {
+	if value, ok := iuo.mutation.FileLocation(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
+			Type:   field.TypeString,
 			Value:  value,
-			Column: image.FieldRegisteredAt,
+			Column: image.FieldFileLocation,
+		})
+	}
+	if value, ok := iuo.mutation.Description(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: image.FieldDescription,
+		})
+	}
+	if value, ok := iuo.mutation.Price(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: image.FieldPrice,
+		})
+	}
+	if value, ok := iuo.mutation.AddedPrice(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeFloat64,
+			Value:  value,
+			Column: image.FieldPrice,
+		})
+	}
+	if value, ok := iuo.mutation.Public(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: image.FieldPublic,
 		})
 	}
 	if iuo.mutation.OwnerCleared() {

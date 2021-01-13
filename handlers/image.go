@@ -8,7 +8,7 @@ import (
 	"strconv"
 
 	"github.com/JustinHaTran/ImageRepo/models"
-	"github.com/JustinHaTran/ImageRepo/ent/user"
+	"github.com/JustinHaTran/ImageRepo/ent/image"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
@@ -19,9 +19,9 @@ User ApiHandling
 */
 
 
-func CreateUser(w http.ResponseWriter, r *http.Request) {
+func CreateImage(w http.ResponseWriter, r *http.Request) {
 	
-	var u models.User
+	var u models.Image
 
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&u); err != nil {
@@ -30,31 +30,34 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	user, err := client.User.    	// UserClient.
-		Create().               	// User create builder.
-		SetName(u.Name).       		// Set field values.
-		SetAge(u.Age).    			// Set field values.
-		Save(ctx)            	    // Create and return.
+	image, err := client.Image.    	
+		Create().               	
+		SetTitle(u.Title).       		
+		SetDescription(u.Description).  
+		SetFileLocation(u.FileLocation).
+		SetPrice(u.Price).				
+		SetPublic(u.Public).			
+		Save(ctx)            	    
 
 	if err != nil {
 		http.Error(w,err.Error(),http.StatusInternalServerError)
 		return
 	}
 
-	log.Println("user was created: ", user)
+	log.Println("image was created: ", image)
 }
 
-func GetUserById(w http.ResponseWriter, r *http.Request) {
+func GetImageById(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
-	userId, err := strconv.Atoi(vars["userId"])
+	imageId, err := strconv.Atoi(vars["imageId"])
 	if err != nil {
 		log.Fatalf("url var is invalid: %v", err)
 	}
 
-	u, err := client.User.
+	u, err := client.Image.
         Query().
-        Where(user.IDEQ(userId)).
+        Where(image.IDEQ(imageId)).
         // `Only` fails if no user found,
         // or more than 1 user returned.
 		Only(ctx)
@@ -66,11 +69,11 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, u)
 }
 
-func UpdateUser(w http.ResponseWriter, r *http.Request) {
+func UpdateImage(w http.ResponseWriter, r *http.Request) {
 
-	var u models.User
+	var u models.Image
 	vars := mux.Vars(r)
-	userId, err := strconv.Atoi(vars["userId"])
+	imageId, err := strconv.Atoi(vars["imageId"])
 	if err != nil {
 		log.Fatalf("url var is invalid: %v", err)
 	}
@@ -82,15 +85,18 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	user, err := client.User.
-		UpdateOneID(userId).        // Pet update builder.
-		SetName(u.Name).       // Set field name.
-		SetAge(u.Age).      // Set unique edge, using id.
+	image, err := client.Image.
+		UpdateOneID(imageId).        // Pet update builder.
+		SetTitle(u.Title).       		
+		SetDescription(u.Description).  
+		SetFileLocation(u.FileLocation).
+		SetPrice(u.Price).				
+		SetPublic(u.Public).
 		Save(ctx)
 	
 	if err != nil {
-		log.Fatalf("failed to find user: %v", err)
+		log.Fatalf("failed to find image: %v", err)
 	}
 
-	respondWithJSON(w, http.StatusOK, user)
+	respondWithJSON(w, http.StatusOK, image)
 }
